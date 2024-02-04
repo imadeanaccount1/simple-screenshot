@@ -4,7 +4,7 @@ const puppeteer = require("puppeteer");
 
 async function screenshot(url: any, width: any, height: any) {
   const browser = await puppeteer.launch({
-    headless: false,
+    headless: "new",
     defaultViewport: {
       width: parseInt(width),
       height: parseInt(height),
