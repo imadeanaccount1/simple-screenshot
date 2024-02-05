@@ -20,7 +20,7 @@ async function screenshot(url: any, width: any, height: any, cookiesList: any) {
   });
   console.log("browser");
   const pageOne = await browser.newPage();
-  console.log("page");
+  console.log("page", cookiesList.length);
   await pageOne.goto(url);
   if (cookiesList.length > 0) {
     await pageOne.setCookie(...cookiesList);
