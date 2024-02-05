@@ -36,23 +36,38 @@ export async function GET(request: NextRequest) {
   const width =
     searchParams.get("width") ||
     headersList.get("width") ||
-    cookieStore.get("width")!.value;
+    (cookieStore.get("width") ? cookieStore.get("width")!.value : null) ||
+    "1920";
   const height =
     searchParams.get("height") ||
     headersList.get("height") ||
-    cookieStore.get("height")!.value ||
+    (cookieStore.get("height") ? cookieStore.get("height")!.value : null) ||
     "1080";
   const url =
     searchParams.get("url") ||
     headersList.get("url") ||
-    cookieStore.get("url")!.value ||
-    "1920";
+    (cookieStore.get("url") ? cookieStore.get("url")!.value : null);
+  if (!url) {
+    return new NextResponse("url is required", {
+      status: 400,
+    });
+  }
   const cookiesList =
     searchParams.get("cookiesList") ||
     headersList.get("cookiesList") ||
-    cookieStore.get("cookiesList")!.value ||
+    (cookieStore.get("cookiesList")
+      ? cookieStore.get("cookiesList")!.value
+      : null) ||
     "[]";
   console.log(width, height, url, cookiesList);
+
+  try {
+    JSON.parse(cookiesList);
+  } catch (err) {
+    return new NextResponse("cookiesList is not valid JSON string", {
+      status: 400,
+    });
+  }
 
   const file = await screenshot(url, width, height, JSON.parse(cookiesList));
 
