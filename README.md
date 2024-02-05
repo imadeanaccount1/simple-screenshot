@@ -14,11 +14,14 @@ Simply run `npm run dev` or `npm run build && npm run start` on either branch to
   Get a screenshot of an entire page based on its URL.
 
   Example URL: [https://simple-screenshot.vercel.app/api/screenshot?width=500&height=500&url=https://wasteof.money](https://simple-screenshot.vercel.app/api/screenshot?width=500&height=500&url=https://wasteof.money)
+
+  You can choose to pass parameters through query parameters, headers, cookies, or a mix.
   
-  Request Parameters:
-    - width (in pixels)
-    - height (in pixels)
-    - url (https only i think)
+  Request Parameters (cookies, headers, or URL params):
+    - url **(required)**
+    - width (in pixels) (optional) - Default Value: 1920
+    - height (in pixels) (optional) - Default Value: 1080
+
   Returns:
   a jpeg image response
 
