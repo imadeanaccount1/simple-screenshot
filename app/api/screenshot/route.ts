@@ -42,19 +42,23 @@ export async function GET(request: NextRequest) {
   const width =
     searchParams.get("width") ||
     headersList.get("width") ||
-    cookieStore.get("width")!.value;
+    (cookieStore.get("width") ? cookieStore.get("width")!.value : null) ||
+    "1920";
   const height =
     searchParams.get("height") ||
     headersList.get("height") ||
-    cookieStore.get("height")!.value;
+    (cookieStore.get("height") ? cookieStore.get("height")!.value : null) ||
+    "1080";
   const url =
     searchParams.get("url") ||
     headersList.get("url") ||
-    cookieStore.get("url")!.value;
+    (cookieStore.get("url") ? cookieStore.get("url")!.value : null);
   const cookiesList =
     searchParams.get("cookiesList") ||
     headersList.get("cookiesList") ||
-    cookieStore.get("cookiesList")!.value ||
+    (cookieStore.get("cookiesList")
+      ? cookieStore.get("cookiesList")!.value
+      : null) ||
     "[]";
   console.log(width, height, url);
   // const referer = headersList.get("referer");
