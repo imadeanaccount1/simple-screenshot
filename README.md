@@ -1,9 +1,14 @@
-## Docs
+## Screenshot Generator
+A simple Next.js API that takes a screenshot of a website and returns it.
 
-Make a get request to:
-https://screenshot-generator-omega.vercel.app/api/hello?width=500&height=500&url=https://wasteof-postexplorer.vercel.app
+## Methods
+- **GET**
 
-the response should be a jpeg image/
-
-where height and width are number of pixels.
-
+  Example URL: [https://simple-screenshot.vercel.app/api/screenshot?width=500&height=500&url=https://wasteof.money](https://simple-screenshot.vercel.app/api/screenshot?width=500&height=500&url=https://wasteof.money)
+  
+  Request Parameters:
+    - width (in pixels)
+    - height (in pixels)
+    - url (https only i think)
+  Returns:
+  a jpeg image response
