@@ -60,7 +60,7 @@ export async function GET(request: NextRequest) {
   // const referer = headersList.get("referer");
   console.log(width, height, url);
 
-  const file = await screenshot(url, width, height, cookiesList);
+  const file = await screenshot(url, width, height, JSON.parse(cookiesList));
 
   // const image3 = await fs.readFileSync(`./scrapingbee_homepage.jpg`);
 
