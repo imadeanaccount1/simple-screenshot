@@ -27,3 +27,7 @@ Simply run `npm run dev` or `npm run build && npm run start` on either branch to
 
 ## Credits
 This API was made for [@radeeyate](https://github.com/radeeyate). 
+
+## Todo:
+- [ ] better type safety
+- [ ] error handling
