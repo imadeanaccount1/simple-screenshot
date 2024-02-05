@@ -2,7 +2,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { cookies, headers } from "next/headers";
 const puppeteer = require("puppeteer");
 
-async function screenshot(url: any, width: any, height: any) {
+async function screenshot(url: any, width: any, height: any, cookiesList: any) {
   const browser = await puppeteer.launch({
     defaultViewport: {
       width: parseInt(width),
@@ -14,6 +14,12 @@ async function screenshot(url: any, width: any, height: any) {
   const pageOne = await browser.newPage();
   console.log("page");
   await pageOne.goto(url);
+  if (cookiesList.length > 0) {
+    await pageOne.setCookie(...cookiesList);
+    const cookiesSet = await pageOne.cookies(url);
+    console.log(JSON.stringify(cookiesSet));
+    await pageOne.reload({ waitUntil: ["networkidle0", "domcontentloaded"] });
+  }
 
   const file = await pageOne.screenshot();
   browser.close();
@@ -34,14 +40,21 @@ export async function GET(request: NextRequest) {
   const height =
     searchParams.get("height") ||
     headersList.get("height") ||
-    cookieStore.get("height")!.value;
+    cookieStore.get("height")!.value ||
+    "1080";
   const url =
     searchParams.get("url") ||
     headersList.get("url") ||
-    cookieStore.get("url")!.value;
-  console.log(width, height, url);
+    cookieStore.get("url")!.value ||
+    "1920";
+  const cookiesList =
+    searchParams.get("cookiesList") ||
+    headersList.get("cookiesList") ||
+    cookieStore.get("cookiesList")!.value ||
+    "[]";
+  console.log(width, height, url, cookiesList);
 
-  const file = await screenshot(url, width, height);
+  const file = await screenshot(url, width, height, JSON.parse(cookiesList));
 
   // const image3 = await fs.readFileSync(`./scrapingbee_homepage.jpg`);
 
