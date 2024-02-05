@@ -1,6 +1,5 @@
-// const fs = require("fs");
 import { NextResponse, NextRequest } from "next/server";
-// const chromium = require("@sparticuz/chromium-min");
+import { cookies, headers } from "next/headers";
 const puppeteer = require("puppeteer");
 
 async function screenshot(url: any, width: any, height: any) {
@@ -24,9 +23,22 @@ async function screenshot(url: any, width: any, height: any) {
 }
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
-  const width = searchParams.get("width");
-  const height = searchParams.get("height");
-  const url = searchParams.get("url");
+  const headersList = headers();
+  const cookieStore = cookies();
+  console.log(cookieStore.get("width"));
+
+  const width =
+    searchParams.get("width") ||
+    headersList.get("width") ||
+    cookieStore.get("width")!.value;
+  const height =
+    searchParams.get("height") ||
+    headersList.get("height") ||
+    cookieStore.get("height")!.value;
+  const url =
+    searchParams.get("url") ||
+    headersList.get("url") ||
+    cookieStore.get("url")!.value;
   console.log(width, height, url);
 
   const file = await screenshot(url, width, height);
