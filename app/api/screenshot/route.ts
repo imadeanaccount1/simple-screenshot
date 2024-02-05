@@ -33,17 +33,19 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const headersList = headers();
   const cookieStore = cookies();
-
   const width =
     searchParams.get("width") ||
     headersList.get("width") ||
-    cookieStore.get("width");
+    cookieStore.get("width")!.value;
   const height =
     searchParams.get("height") ||
     headersList.get("height") ||
-    cookieStore.get("height");
+    cookieStore.get("height")!.value;
   const url =
-    searchParams.get("url") || headersList.get("url") || cookieStore.get("url");
+    searchParams.get("url") ||
+    headersList.get("url") ||
+    cookieStore.get("url")!.value;
+  console.log(width, height, url);
   // const referer = headersList.get("referer");
   console.log(width, height, url);
 
