@@ -16,3 +16,6 @@ API Endpoint: https://simple-screenshot.vercel.app/api
     - url (https only i think)
   Returns:
   a jpeg image response
+
+## Credits
+This API was made for [@radeeyate](https://github.com/radeeyate)
