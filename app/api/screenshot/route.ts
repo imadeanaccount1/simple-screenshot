@@ -53,6 +53,11 @@ export async function GET(request: NextRequest) {
     searchParams.get("url") ||
     headersList.get("url") ||
     (cookieStore.get("url") ? cookieStore.get("url")!.value : null);
+  if (!url) {
+    return new NextResponse("url is required", {
+      status: 400,
+    });
+  }
   const cookiesList =
     searchParams.get("cookiesList") ||
     headersList.get("cookiesList") ||
@@ -60,9 +65,15 @@ export async function GET(request: NextRequest) {
       ? cookieStore.get("cookiesList")!.value
       : null) ||
     "[]";
-  console.log(width, height, url);
-  // const referer = headersList.get("referer");
-  console.log(width, height, url);
+  console.log(width, height, url, cookiesList);
+
+  try {
+    JSON.parse(cookiesList);
+  } catch (err) {
+    return new NextResponse("cookiesList is not valid JSON string", {
+      status: 400,
+    });
+  }
 
   const file = await screenshot(url, width, height, JSON.parse(cookiesList));
 
