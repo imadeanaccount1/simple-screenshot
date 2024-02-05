@@ -13,13 +13,12 @@ async function screenshot(url: any, width: any, height: any, cookiesList: any) {
   console.log("browser");
   const pageOne = await browser.newPage();
   console.log("page");
-  await pageOne.goto(url);
+  // await pageOne.goto(url);
+
   if (cookiesList.length > 0) {
     await pageOne.setCookie(...cookiesList);
-    const cookiesSet = await pageOne.cookies(url);
-    console.log(JSON.stringify(cookiesSet));
-    await pageOne.reload({ waitUntil: ["networkidle0", "domcontentloaded"] });
   }
+  await pageOne.goto(url);
 
   const file = await pageOne.screenshot();
   browser.close();
