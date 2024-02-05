@@ -23,4 +23,4 @@ Simply run `npm run dev` or `npm run build && npm run start` on either branch to
   a jpeg image response
 
 ## Credits
-This API was made for [@radeeyate](https://github.com/radeeyate)
+This API was made for [@radeeyate](https://github.com/radeeyate). 
