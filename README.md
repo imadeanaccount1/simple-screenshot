@@ -9,7 +9,7 @@ If you want to run this API locally, use the `local` branch, which has the same 
 Simply run `npm run dev` or `npm run build && npm run start` on either branch to run!
 
 ## Methods
-- **GET `api/screenshots`**
+- **GET `api/screenshot`**
 
   Get a screenshot of an entire page based on its URL.
 
@@ -23,4 +23,4 @@ Simply run `npm run dev` or `npm run build && npm run start` on either branch to
   a jpeg image response
 
 ## Credits
-This API was made for [@radeeyate](https://github.com/radeeyate)
+This API was made for [@radeeyate](https://github.com/radeeyate). 
