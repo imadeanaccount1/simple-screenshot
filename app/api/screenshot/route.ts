@@ -1,4 +1,4 @@
-const fs = require("fs");
+// const fs = require("fs");
 import { NextResponse, NextRequest } from "next/server";
 const chromium = require("@sparticuz/chromium-min");
 const puppeteer = require("puppeteer");
