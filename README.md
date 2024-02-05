@@ -19,8 +19,9 @@ Simply run `npm run dev` or `npm run build && npm run start` on either branch to
   
   Request Parameters (cookies, headers, or URL params):
     - url **(required)**
-    - width (in pixels) (optional) - Default Value: 1920
-    - height (in pixels) (optional) - Default Value: 1080
+    - width (number of pixels) (optional) - Default Value: 1920
+    - height (number of pixels) (optional) - Default Value: 1080
+    - cookiesList (a JSON string array in the form `[{ "name": "token", "value": "" }]` that can be used to authenticate with the site you are taking a screenshot of) (optional) - Default Value: "[]"
 
   Returns:
   a jpeg image response
