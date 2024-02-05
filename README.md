@@ -1,7 +1,12 @@
-## Screenshot Generator
+## Simple Screenshot Generator
 A simple Next.js API that takes a screenshot of a website and returns it.
 
 API Endpoint: https://simple-screenshot.vercel.app/api
+
+## Usage
+If you want to run this API locally, use the `local` branch, which has the same request formatting/schemas. If you want to deploy to Vercel or Netlify, use the `main` branch.
+
+Simply run `npm run dev` or `npm run build && npm run start` on either branch to run!
 
 ## Methods
 - **GET `api/screenshots`**
@@ -16,3 +21,6 @@ API Endpoint: https://simple-screenshot.vercel.app/api
     - url (https only i think)
   Returns:
   a jpeg image response
+
+## Credits
+This API was made for [@radeeyate](https://github.com/radeeyate)
