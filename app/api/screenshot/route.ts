@@ -59,16 +59,37 @@ export async function GET(request: NextRequest) {
     headersList.get("width") ||
     (cookieStore.get("width") ? cookieStore.get("width")!.value : null) ||
     "1920";
+  try {
+    parseInt(width);
+  } catch (err) {
+    return new NextResponse("width is not an integer", {
+      status: 400,
+    });
+  }
   const height: string =
     searchParams.get("height") ||
     headersList.get("height") ||
     (cookieStore.get("height") ? cookieStore.get("height")!.value : null) ||
     "1080";
+  try {
+    parseInt(height);
+  } catch (err) {
+    return new NextResponse("height is not an integer", {
+      status: 400,
+    });
+  }
   const scale =
     searchParams.get("scale") ||
     headersList.get("scale") ||
     (cookieStore.get("scale") ? cookieStore.get("scale")!.value : null) ||
     "1";
+  try {
+    parseFloat(scale);
+  } catch (err) {
+    return new NextResponse("scale is not a float", {
+      status: 400,
+    });
+  }
   const url: string | null =
     searchParams.get("url") ||
     headersList.get("url") ||
