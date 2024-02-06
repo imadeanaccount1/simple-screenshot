@@ -13,19 +13,21 @@ async function screenshot(
     name: string;
     value: string;
     domain: string;
-    path: string;
-    expires: number;
-    size: number;
-    httpOnly: boolean;
-    secure: boolean;
-    session: boolean;
-  }>
+    path?: string;
+    expires?: number;
+    size?: number;
+    httpOnly?: boolean;
+    secure?: boolean;
+    session?: boolean;
+  }>,
+  scale: string
 ) {
   const browser = await puppeteer.launch({
     args: [...chromium.args, "--hide-scrollbars", "--disable-web-security"],
     defaultViewport: {
       width: parseInt(width),
       height: parseInt(height),
+      deviceScaleFactor: parseFloat(scale),
     },
     executablePath: await chromium.executablePath(
       `https://github.com/Sparticuz/chromium/releases/download/v121.0.0/chromium-v121.0.0-pack.tar`
@@ -62,6 +64,11 @@ export async function GET(request: NextRequest) {
     headersList.get("height") ||
     (cookieStore.get("height") ? cookieStore.get("height")!.value : null) ||
     "1080";
+  const scale =
+    searchParams.get("scale") ||
+    headersList.get("scale") ||
+    (cookieStore.get("scale") ? cookieStore.get("scale")!.value : null) ||
+    "1";
   const url: string | null =
     searchParams.get("url") ||
     headersList.get("url") ||
@@ -88,7 +95,13 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  const file = await screenshot(url, width, height, JSON.parse(cookiesList));
+  const file = await screenshot(
+    url,
+    width,
+    height,
+    JSON.parse(cookiesList),
+    scale
+  );
 
   // const image3 = await fs.readFileSync(`./scrapingbee_homepage.jpg`);
 
