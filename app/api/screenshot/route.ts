@@ -3,11 +3,21 @@ import { cookies, headers } from "next/headers";
 const puppeteer = require("puppeteer");
 
 async function screenshot(
-  url: any,
-  width: any,
-  height: any,
-  cookiesList: any,
-  scale: any
+  url: string,
+  width: string,
+  height: string,
+  cookiesList: Array<{
+    name: string;
+    value: string;
+    domain: string;
+    path?: string;
+    expires?: number;
+    size?: number;
+    httpOnly?: boolean;
+    secure?: boolean;
+    session?: boolean;
+  }>,
+  scale: string
 ) {
   console.log(parseInt(scale) == 0.1);
   const browser = await puppeteer.launch({
@@ -45,16 +55,37 @@ export async function GET(request: NextRequest) {
     headersList.get("width") ||
     (cookieStore.get("width") ? cookieStore.get("width")!.value : null) ||
     "1920";
+  try {
+    parseInt(width);
+  } catch (err) {
+    return new NextResponse("width is not an integer", {
+      status: 400,
+    });
+  }
   const height =
     searchParams.get("height") ||
     headersList.get("height") ||
     (cookieStore.get("height") ? cookieStore.get("height")!.value : null) ||
     "1080";
+  try {
+    parseInt(height);
+  } catch (err) {
+    return new NextResponse("height is not an integer", {
+      status: 400,
+    });
+  }
   const scale =
     searchParams.get("scale") ||
     headersList.get("scale") ||
     (cookieStore.get("scale") ? cookieStore.get("scale")!.value : null) ||
     "1";
+  try {
+    parseFloat(scale);
+  } catch (err) {
+    return new NextResponse("scale is not a float", {
+      status: 400,
+    });
+  }
   const url =
     searchParams.get("url") ||
     headersList.get("url") ||
