@@ -5,7 +5,22 @@ import { cookies } from "next/headers";
 const chromium = require("@sparticuz/chromium-min");
 const puppeteer = require("puppeteer");
 
-async function screenshot(url: any, width: any, height: any, cookiesList: any) {
+async function screenshot(
+  url: string,
+  width: string,
+  height: string,
+  cookiesList: Array<{
+    name: string;
+    value: string;
+    domain: string;
+    path: string;
+    expires: number;
+    size: number;
+    httpOnly: boolean;
+    secure: boolean;
+    session: boolean;
+  }>
+) {
   const browser = await puppeteer.launch({
     args: [...chromium.args, "--hide-scrollbars", "--disable-web-security"],
     defaultViewport: {
@@ -37,17 +52,17 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const headersList = headers();
   const cookieStore = cookies();
-  const width =
+  const width: string =
     searchParams.get("width") ||
     headersList.get("width") ||
     (cookieStore.get("width") ? cookieStore.get("width")!.value : null) ||
     "1920";
-  const height =
+  const height: string =
     searchParams.get("height") ||
     headersList.get("height") ||
     (cookieStore.get("height") ? cookieStore.get("height")!.value : null) ||
     "1080";
-  const url =
+  const url: string | null =
     searchParams.get("url") ||
     headersList.get("url") ||
     (cookieStore.get("url") ? cookieStore.get("url")!.value : null);
@@ -77,7 +92,7 @@ export async function GET(request: NextRequest) {
 
   // const image3 = await fs.readFileSync(`./scrapingbee_homepage.jpg`);
 
-  const response = new NextResponse(file, {
+  const response: NextResponse = new NextResponse(file, {
     headers: {
       "content-type": "image/jpg",
     },
