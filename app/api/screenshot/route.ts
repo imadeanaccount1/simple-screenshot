@@ -23,7 +23,11 @@ async function screenshot(
   scale: string,
   extraHeaders: {
     [key: string]: any;
-  }
+  },
+  mediaFeatures: Array<{
+    name: string;
+    value: string;
+  }>
 ) {
   const browser = await puppeteer.launch({
     args: [...chromium.args, "--hide-scrollbars", "--disable-web-security"],
@@ -47,6 +51,9 @@ async function screenshot(
   }
   if (Object.keys(extraHeaders).length > 0) {
     await pageOne.setExtraHTTPHeaders(extraHeaders);
+  }
+  if (mediaFeatures.length > 0) {
+    await pageOne.emulateMediaFeatures(mediaFeatures);
   }
   await pageOne.goto(url);
 
@@ -137,13 +144,27 @@ export async function GET(request: NextRequest) {
     });
   }
 
+  const mediaFeatures =
+    searchParams.get("mediaFeatures") ||
+    headersList.get("mediaFeatures") ||
+    (cookieStore.get("mediaFeatures")
+      ? cookieStore.get("mediaFeatures")!.value
+      : "[]");
+  try {
+    JSON.parse(mediaFeatures);
+  } catch (err) {
+    return new NextResponse("mediaFeatures is not valid JSON Array string", {
+      status: 400,
+    });
+  }
   const file = await screenshot(
     url,
     width,
     height,
     JSON.parse(cookiesList),
     scale,
-    JSON.parse(extraHeaders)
+    JSON.parse(extraHeaders),
+    JSON.parse(mediaFeatures)
   );
 
   // const image3 = await fs.readFileSync(`./scrapingbee_homepage.jpg`);
