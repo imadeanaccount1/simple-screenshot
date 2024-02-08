@@ -20,7 +20,10 @@ async function screenshot(
     secure?: boolean;
     session?: boolean;
   }>,
-  scale: string
+  scale: string,
+  extraHeaders: {
+    [key: string]: any;
+  }
 ) {
   const browser = await puppeteer.launch({
     args: [...chromium.args, "--hide-scrollbars", "--disable-web-security"],
@@ -41,6 +44,9 @@ async function screenshot(
 
   if (cookiesList.length > 0) {
     await pageOne.setCookie(...cookiesList);
+  }
+  if (Object.keys(extraHeaders).length > 0) {
+    await pageOne.setExtraHTTPHeaders(extraHeaders);
   }
   await pageOne.goto(url);
 
@@ -111,7 +117,22 @@ export async function GET(request: NextRequest) {
   try {
     JSON.parse(cookiesList);
   } catch (err) {
-    return new NextResponse("cookiesList is not valid JSON string", {
+    return new NextResponse("cookiesList is not valid JSON Array string", {
+      status: 400,
+    });
+  }
+
+  const extraHeaders =
+    searchParams.get("extraHeaders") ||
+    headersList.get("extraHeaders") ||
+    (cookieStore.get("extraHeaders")
+      ? cookieStore.get("extraHeaders")!.value
+      : null) ||
+    "{}";
+  try {
+    JSON.parse(extraHeaders);
+  } catch (err) {
+    return new NextResponse("extraHeaders is not valid JSON Object string", {
       status: 400,
     });
   }
@@ -121,7 +142,8 @@ export async function GET(request: NextRequest) {
     width,
     height,
     JSON.parse(cookiesList),
-    scale
+    scale,
+    JSON.parse(extraHeaders)
   );
 
   // const image3 = await fs.readFileSync(`./scrapingbee_homepage.jpg`);
