@@ -17,7 +17,14 @@ async function screenshot(
     secure?: boolean;
     session?: boolean;
   }>,
-  scale: string
+  scale: string,
+  extraHeaders: {
+    [key: string]: any;
+  },
+  mediaFeatures: Array<{
+    name: string;
+    value: string;
+  }>
 ) {
   console.log(parseInt(scale) == 0.1);
   const browser = await puppeteer.launch({
@@ -35,6 +42,12 @@ async function screenshot(
 
   if (cookiesList.length > 0) {
     await pageOne.setCookie(...cookiesList);
+  }
+  if (Object.keys(extraHeaders).length > 0) {
+    await pageOne.setExtraHTTPHeaders(extraHeaders);
+  }
+  if (mediaFeatures.length > 0) {
+    await pageOne.emulateMediaFeatures(mediaFeatures);
   }
   await pageOne.goto(url);
 
@@ -102,22 +115,52 @@ export async function GET(request: NextRequest) {
       ? cookieStore.get("cookiesList")!.value
       : null) ||
     "[]";
-  console.log(width, height, url, cookiesList, scale);
 
   try {
     JSON.parse(cookiesList);
   } catch (err) {
-    return new NextResponse("cookiesList is not valid JSON string", {
+    return new NextResponse("cookiesList is not valid JSON Array string", {
       status: 400,
     });
   }
 
+  const extraHeaders =
+    searchParams.get("extraHeaders") ||
+    headersList.get("extraHeaders") ||
+    (cookieStore.get("extraHeaders")
+      ? cookieStore.get("extraHeaders")!.value
+      : null) ||
+    "{}";
+
+  try {
+    JSON.parse(extraHeaders);
+  } catch (err) {
+    return new NextResponse("extraHeaders is not valid JSON Object string", {
+      status: 400,
+    });
+  }
+
+  const mediaFeatures =
+    searchParams.get("mediaFeatures") ||
+    headersList.get("mediaFeatures") ||
+    (cookieStore.get("mediaFeatures")
+      ? cookieStore.get("mediaFeatures")!.value
+      : "[]");
+  try {
+    JSON.parse(mediaFeatures);
+  } catch (err) {
+    return new NextResponse("mediaFeatures is not valid JSON Array string", {
+      status: 400,
+    });
+  }
   const file = await screenshot(
     url,
     width,
     height,
     JSON.parse(cookiesList),
-    scale
+    scale,
+    JSON.parse(extraHeaders),
+    JSON.parse(mediaFeatures)
   );
 
   // const image3 = await fs.readFileSync(`./scrapingbee_homepage.jpg`);
